@@ -23,3 +23,28 @@
 | 412 broccoli casserole            | 306168 |        40 |            50969 | 2008-05-30  | ['60-minutes-or-less', 'time-t... |         6 | ['preheat oven to 350 degrees'... | since there are already 411 re... | ['frozen broccoli cuts', 'crea... |               9 |  29782           |      306168 | 2008-12-31 |        5 | This was one of the best brocc... |      194.8 |          20 |       6 |       32 |        22 |              36 |               3 |                5 |
 | 412 broccoli casserole            | 306168 |        40 |            50969 | 2008-05-30  | ['60-minutes-or-less', 'time-t... |         6 | ['preheat oven to 350 degrees'... | since there are already 411 re... | ['frozen broccoli cuts', 'crea... |               9 |      1.19628e+06 |      306168 | 2009-04-13 |        5 | I made this for my son's first... |      194.8 |          20 |       6 |       32 |        22 |              36 |               3 |                5 |
 | 412 broccoli casserole            | 306168 |        40 |            50969 | 2008-05-30  | ['60-minutes-or-less', 'time-t... |         6 | ['preheat oven to 350 degrees'... | since there are already 411 re... | ['frozen broccoli cuts', 'crea... |               9 | 768828           |      306168 | 2013-08-02 |        5 | Loved this.  Be sure to comple... |      194.8 |          20 |       6 |       32 |        22 |              36 |               3 |                5 |
+
+
+
+<iframe
+  src="assets/contributions_per_contributor.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+<iframe
+  src="assets/top_10_contributors_by_avg_rating.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+
+|   contributor_id |   num_contributions |   avg_rating |
+|-----------------:|--------------------:|-------------:|
+|      2.19261e+06 |                 106 |      5       |
+| 306726           |                 115 |      4.98949 |
+|      2.39055e+06 |                 360 |      4.97907 |
+|      2.68903e+06 |                 139 |      4.97448 |
+|      2.21634e+06 |                 140 |      4.97424 |

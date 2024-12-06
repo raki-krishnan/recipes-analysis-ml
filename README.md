@@ -32,12 +32,12 @@ Above is a list of all the column names in the cleaned recipes dataframe that I 
 
 The columns that are most related to my EDA were 'contributor_id', 'rating', 'average_rating', and a column I later created called 'num_contributions'.
 
-<span style="color: limegreen; font-weight: bold;">contributer_id</span>: A unique way to identify the contributors (also known as primary key). This column is of type integer. \
-<span style="color: limegreen; font-weight: bold;">'rating'</span>: A single rating of the recipe given by a user. This column is of type integer. \
-<span style="color: limegreen; font-weight: bold;">'average_rating'</span>: The mean rating that a recipe was given. This column is of type float. \
-<span style="color: limegreen; font-weight: bold;">'num_contributions'</span>: The number of contributions a contributor made. This column is of type integer. \
+<span style="color: #bfff00 limegreen; font-weight: bold;">contributer_id</span>: A unique way to identify the contributors (also known as primary key). This column is of type integer. \
+<span style="color: #bfff00 limegreen; font-weight: bold;">'rating'</span>: A single rating of the recipe given by a user. This column is of type integer. \
+<span style="color: #bfff00 limegreen; font-weight: bold;">'average_rating'</span>: The mean rating that a recipe was given. This column is of type float. \
+<span style="color: #bfff00 limegreen; font-weight: bold;">'num_contributions'</span>: The number of contributions a contributor made. This column is of type integer.
 
-
+## **Data Cleaning and Exploratory Data Analysis**
 
 <iframe
   src="assets/dist_of_ratings_before_replacing.html"
@@ -87,3 +87,9 @@ The columns that are most related to my EDA were 'contributor_id', 'rating', 'av
 |      2.68903e+06 |                 139 |      4.97448 |
 |      2.21634e+06 |                 140 |      4.97424 |
 
+
+## **Framing a Prediction Problem**
+
+## **Baseline Model**
+
+## **Final Model**

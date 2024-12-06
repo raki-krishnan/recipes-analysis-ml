@@ -32,10 +32,11 @@ Above is a list of all the column names in the cleaned recipes dataframe that I 
 
 The columns that are most related to my EDA were 'contributor_id', 'rating', 'average_rating', and a column I later created called 'num_contributions'.
 
-**contributer_id**: A unique way to identify the contributors (also known as primary key). This column is of type integer.
-**'rating'**: A single rating of the recipe given by a user. This column is of type integer.
-**'average_rating'**: The mean rating that a recipe was given. This column is of type float.
-**'num_contributions'**: The number of contributions a contributor made. This column is of type integer.
+<span style="color: limegreen; font-weight: bold;">contributer_id</span>: A unique way to identify the contributors (also known as primary key). This column is of type integer. \
+<span style="color: limegreen; font-weight: bold;">'rating'</span>: A single rating of the recipe given by a user. This column is of type integer. \
+<span style="color: limegreen; font-weight: bold;">'average_rating'</span>: The mean rating that a recipe was given. This column is of type float. \
+<span style="color: limegreen; font-weight: bold;">'num_contributions'</span>: The number of contributions a contributor made. This column is of type integer. \
+
 
 
 <iframe

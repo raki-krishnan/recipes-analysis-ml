@@ -1,18 +1,55 @@
 # **Welcome to Raki's Data Analysis!**
 
+## **Introduction**
+
+I am a hungry person, both for knowledge and food (😆). Consequently, I decided that the most interesting data to analyze would be recipes for delicious dishes. The recipes I analyzed are pulled directly from [food.com](https://www.food.com). Each row in my dataframe contains a recipe, and each column contains useful information about the recipes. Displayed below is information about my dataframe, including the shape and column names.
+
+### Shape of the Recipes Dataframe: 
+
+So what was I actually working with once I cleaned the data and was left with my dataframe ready for analysis?
+
+```py
+print(recipes.shape)
+```
+(234429, 24)
+
+The above result from the code means that there are 234,429 rows and 24 columns in my recipes dataframe!
+
+### Exploratory data analysis (EDA) Question: 
+
+**Which contributors consistently have the highest average recipe ratings?**
+
+This is an important question to think about, because if I am ever super hungry in the future (and also learn how to actually cook), I will know which contributors' recipes to look at. After reading through this EDA, you will also know which contributors are the most esteemed on food.com.
+
+### Which columns were most important to my EDA?
+
+```py
+print(recipes.columns.to_list())
+```
+['name', 'id', 'minutes', 'contributor_id', 'submitted', 'tags', 'n_steps', 'steps', 'description', 'ingredients', 'n_ingredients', 'user_id', 'recipe_id', 'date', 'rating', 'review', 'calories', 'total_fat', 'sugar', 'sodium', 'protein', 'saturated_fat', 'carbohydrates', 'average_rating']
+
+Above is a list of all the column names in the cleaned recipes dataframe that I used for analysis.
+
+The columns that are most related to my EDA were 'contributor_id', 'rating', 'average_rating', and a column I later created called 'num_contributions'.
+
+**contributer_id**: A unique way to identify the contributors (also known as primary key). This column is of type integer.
+**'rating'**: A single rating of the recipe given by a user. This column is of type integer.
+**'average_rating'**: The mean rating that a recipe was given. This column is of type float.
+**'num_contributions'**: The number of contributions a contributor made. This column is of type integer.
+
 
 <iframe
   src="assets/dist_of_ratings_before_replacing.html"
-  width="800"
-  height="600"
+  width="900"
+  height="675"
   frameborder="0"
 ></iframe>
 
 
 <iframe
   src="assets/dist_of_ratings_after_replacing.html"
-  width="800"
-  height="600"
+  width="900"
+  height="675"
   frameborder="0"
 ></iframe>
 
@@ -28,15 +65,15 @@
 
 <iframe
   src="assets/contributions_per_contributor.html"
-  width="800"
-  height="600"
+  width="700"
+  height="800"
   frameborder="0"
 ></iframe>
 
 <iframe
   src="assets/top_10_contributors_by_avg_rating.html"
-  width="800"
-  height="600"
+  width="1000"
+  height="700"
   frameborder="0"
 ></iframe>
 
@@ -48,3 +85,4 @@
 |      2.39055e+06 |                 360 |      4.97907 |
 |      2.68903e+06 |                 139 |      4.97448 |
 |      2.21634e+06 |                 140 |      4.97424 |
+

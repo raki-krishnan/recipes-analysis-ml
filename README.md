@@ -1,5 +1,7 @@
 # **From the Contributors to the Calories: An Exploration of Recipes - by Raki "Gordon Ramsay" Krishnan**
 
+Contact: raki@umich.edu
+
 ## **Introduction**
 
 I am a hungry person, both for knowledge and food (😆). I am also a big fan of Gordon Ramsay (👨‍🍳😡). Consequently, I decided that the most interesting data to analyze would be recipes for delicious dishes. The recipes I analyzed are pulled directly from [food.com](https://www.food.com). Each row in my dataframe contains a recipe, and each column contains useful information about the recipes. Displayed below is information about my dataframe, including the shape and column names.
@@ -111,7 +113,7 @@ As we can see, food.com reviewers seem to be quite supportive on average. Most r
 
 ### Bivariate Analysis
 
-After displaying the distribution of single columns, I looked at the distribution of multiple columns. Specifically, I answered my question with a cool interactive plot that looked at the top ten contributors by average rating. I configured the bar plot so that the user can change the minimum threshold for number of contributions for the contributor to be displayed. The reason I started the minimum threshold at 100 is that there are an overwhelming number of contributors with a small amount of contributions and an average rating between 4.9-5 stars. Additionally, I wanted to explore the contributors who were most **consistent**. The number inside of the bar is the nbumber of contributions that contributor has. This plot is shown below.
+After displaying the distribution of single columns, I looked at the distribution of multiple columns. Specifically, I answered my question with a cool interactive plot that looked at the top ten contributors by average rating. I configured the bar plot so that the user can change the minimum threshold for number of contributions for the contributor to be displayed. The reason I started the minimum threshold at 100 is that there are an overwhelming number of contributors with a small amount of contributions and an average rating between 4.9-5 stars. Additionally, I wanted to explore the contributors who were most **consistent**. The number inside of the bar is the number of contributions under a contributor's name. This plot is shown below.
 
 <iframe
   src="assets/top_10_contributors_by_avg_rating.html"
@@ -144,7 +146,7 @@ Below is a table showing the aggregates of (1) average count of contributions ea
 
 ## **Framing a Prediction Problem**
 
-After that interesting EDA, I decided to shift gears. I decided to predict the 'calories' column of my recipes dataframe. This is a supervised learning regression problem because calories is a numeric variable. I am getting my wisdom teeth taken out soon, and am going to need to eat a lot of soup in the following days. To make it more interesting, I decided to specifically <span style="color: limegreen;">predict the 'calories' column for soup recipes</span>. 
+After that interesting EDA, I decided to shift gears. I decided to predict the 'calories' column of my recipes dataframe. This is a supervised learning regression problem because calories is a quantitative variable. I am getting my wisdom teeth taken out soon, and am going to need to eat a lot of soup in the following days. To make it more interesting, I decided to specifically <span style="color: limegreen;">predict the 'calories' column for soup recipes</span>. 
 
 I determined which recipes were soup recipes by filtering my dataframe based on the name of the recipe including the substring "soup". Below is the line of code showing how I did it:
 
@@ -154,7 +156,7 @@ recipes_copy = recipes_copy.loc[recipes_copy['name'].str.contains('soup', case=F
 ```
 Note: The case=False parameter makes it so a case-insensitive search will occur
 
-Now that I have created this smaller dataframe called recipes_copy(), it is important to know how many rows are in the dataframe. After called recipes_copy.shape I saw that there are 9628 rows.
+Now that I have created this smaller dataframe called recipes_copy, it is important to know how many rows are in the dataframe. After called recipes_copy.shape I saw that there are 9628 rows.
 
 ## **Baseline Model**
 
@@ -184,11 +186,142 @@ Below is a 3D graph showing the predicted and actual values of my baseline model
   height="600"
   frameborder="0"
   style="margin-top: 20px; margin-bottom: -150px;"
-
 ></iframe>
 
-This graph is a 3-dimensional scatterplot that shows the distribution of actual and predicted values for the calories column. It appears that the model did a decent job, as there is a lot of overlap between the red and blue. Additionally, I used the mean_squared_error function and r2_score functions from sklearn.metrics to calculate the mean-squared error (MSE) of this model. It has a MSE of 26388.78. 
+This graph is a 3-dimensional scatterplot that shows the distribution of actual and predicted values for the calories column. It appears that the model did a decent job, as there is a lot of overlap between the red and blue. Additionally, I used the mean_squared_error function and r2_score functions from sklearn.metrics to calculate the mean-squared error (MSE) of this model. It has a MSE of  <span style="color: limegreen;"> 26388.78 </span>. 
 
 Given that there are 9628 rows in the dataframe this MSE not bad. However, the MSE does not tell the full story. I do not think that this model is very good overall. Firstly, the model relies only on 'carbohydrates' and 'sugar' to predict 'calories'. While these are important factors to indicate calorie content of soups, there are many more features that could be added to improve the predictions. Additionally, while standard scaling helps in handling features with different units or scales, it doesn't address the potential issue of outliers or non-normal distributions of features, which can negatively affect model performance. 
 
 ## **Final Model**
+
+My final model is a Ridge regression model with λ=1.0 and features 'sugar', 'protein', 'sodium', 'carbohydrates', and 'n_steps'. However, determining these features, determining that Ridge Regression was the best type of regression to use, and finding the hyperparameter was a long road. Let's discuss how I got to this point. 
+
+### Features
+
+Below is a list of the columns in the recipes dataframe, along with their datatypes as given by recipes.dtypes
+
+name               object
+id                  int64
+minutes             int64
+contributor_id      int64
+submitted          object
+tags               object
+n_steps             int64
+steps              object
+description        object
+ingredients        object
+n_ingredients       int64
+user_id           float64
+recipe_id         float64
+date               object
+rating            float64
+review             object
+calories          float64
+total_fat         float64
+sugar             float64
+sodium            float64
+protein           float64
+saturated_fat     float64
+carbohydrates     float64
+average_rating    float64
+
+All of the columns of datatype "object" are columns containing strings, whether formatted in a list of strings or just a singular string. None of these columns really made sense to incorporate into my model when predicting calories, as there is no significant relation between any of these columns and the number of calories. 
+
+That left me with the quantitative columns to choose from. To do this, I took a look at the correlation between the potentially relavent quanititative categories and the calories column, using the code snippet below:
+
+```py
+with pd.option_context('display.float_format', '{:.3f}'.format):
+    with pd.option_context('display.max_rows', None):
+        print("\nDisplaying correlation between variables and calories:")
+        print(recipes_cleaned[numeric_categories].corr()['calories'])
+```
+
+Here are the results:
+```
+Displaying correlation between variables and calories:
+n_ingredients     0.182
+minutes           0.001
+calories          1.000
+carbohydrates     0.794
+sugar             0.475
+protein           0.843
+sodium            0.582
+total_fat         0.771
+average_rating   -0.022
+n_steps           0.113
+```
+
+The most correlated features to calories are carbohydrates, protein, total_fat, and saturated fat. There is clearly multicollinearity of total fat and saturated fat, since saturated fat is a subset of total fat. This means that they are essentially (perhaps not perfect) linear combinations of each other. And through my testing of the model, I saw that  when carbohydrates and total fat were both included features on the model, this caused overfitting. Therefore, out of 'carbohydrates', 'total_fat', and "saturated_fat', it only made sense to choose one of these features for my final model. Since carbohydrates has the highest correlation to calories, while not having such a high correlation that it would dominate all other features, I chose <span style="color: limegreen;">'carbohydrates'</span> to be my first feature.
+
+Next, pairing the 'carbohydrates' feature with the 'protein' feature did not end up causing overfitting. This makes sense because many soups can have a high content of carbohydrates, while having a low content of protein (and vice-versa) in terms of percent daily value. Thus, the next feature I included in my final model was <span style="color: limegreen;">'protein'</span>.
+
+The columns 'sugar' and 'sodium' both have moderate positive linear relationships with the 'calorie' column, and thus these were good candidates. Additionally, a high sugar content in a soup does not indicate a high sodium content (and vice-versa), so including both of these would not introduce multicollinearity. Therefore, the next two features I added into my model were <span style="color: limegreen;">'sugar'</span> and <span style="color: limegreen;">'sodium'</span>.
+
+The 'average_rating' and 'minutes' columns do not appear to have any linear relationship with the 'calories' column, so I excluded these columns. Including either of these columns would have just added unnecessary noise and potentially made the predictions less generalizable to unseen data.
+
+The last two columns to consider adding as features were 'n_steps' and 'n_ingredients'. Using print(recipes_cleaned[['n_ingredients', 'n_steps']].corr()), I saw that there is a slight correlation between 'n_steps' and 'n_ingredients'. Therefore, it would not be pertinent to put both in the model, especially given that they are both only very loosely correlated to 'calories'. However, adding in one of these columns as a feature could still provide some value, as there is a loose correlation to 'calories', and the regularization from the regression model I use would account for this by putting a small coefficient on the variable. Thus, I originally decided to try adding 'n_ingredients' as a feature, because it has a slightly higher correlation, but surprisingly it resulted in a negative coefficient. This is counterintuitive, and thus a questionable feature to add into my model. Therefore, I landed on using <span style="color: limegreen;">'n_steps'</span> as my final feature.
+
+In summary, my final features list looked like this:
+
+```py
+features = ['carbohydrates','protein', 'sugar','sodium','n_steps']
+```
+
+### Hyperparameter Optimization and the Decision Between Ridge vs Lasso
+
+Once I determined the optimal features for my model, I had to decide which type of model to use: A Ridge regression model or Lasso regression model? Before comparing the models, I had to first find their respective optimal hyperparameters. I did this through using sklearn's GridSearchCV using 5 folds for the cross-validation and negative mean squared error as scoring. This resulted in finding that 1.0 was the best hyperparameter for Ridge regression and 0.1 was the best hyperparameter for Lasso regression.
+
+Once I had these optimal hyperparameters, I was able to run each pipeline I creating, using StandardScaler() and the respective type of regression, and see the results of the predictions. Below is displayed the MSE for each model using sklearn.metric's mean_squared_error() fucntion, adn the cross validation MSEs using sklearn.model_selection's cross_val_score() function:
+
+<div style="border: 2px solid limegreen; padding: 10px;">
+
+Ridge Regression: Mean Squared Error = 12835.58<br>
+Lasso Regression: Mean Squared Error = 12835.22<br><br>
+Ridge MSE Scores: [13718.33, 16171.17, 9810.49, 14111.67, 17772.22]<br>
+Lasso MSE Scores: [13712.31, 16175.31, 9806.52, 14107.02, 17776.29]<br><br>
+Average MSE for Ridge Cross Validation: 14316.774243077636<br>
+Average MSE for Lasso Cross Validation: 14315.490150292608
+
+</div>
+
+The MSEs are almost identical! This made sense once I printed out the coefficients of each model:
+
+<div style="border: 2px solid limegreen; padding: 10px;">
+
+Ridge Coefficients: <br>
+carbohydrates: 121.5504 <br>
+protein: 160.0611 <br>
+sugar: 9.5887 <br>
+sodium: 20.5648 <br>
+n_steps: 11.8974 <br><br>
+Lasso Coefficients: <br>
+carbohydrates: 121.5470 <br>
+protein: 160.0492 <br>
+sugar: 9.5192<br>
+sodium: 20.5039<br>
+n_steps: 11.8050
+
+</div>
+
+The coefficients are also very similar!
+
+It seems like the choice between Ridge and Lasso could be a toss-up here, as they have nearly identical performance and coefficients. In the end, I decided Ridge Regression would be more appropriate to answer this specific question. This is because because Lasso regression is more likely to completely make features obsolete, which might not generalize as well compared to Ridge regression. If we were to continue building this model with more features and data, I believe that for the aformentioned reasons, <span style="color: limegreen;"> Ridge Regression </span> would generalize better to unseen data.
+
+### Final Model vs. Baseline Model
+
+The most obvious improvement that my final model made compared to my baseline model is the large decrease in mean-squared error. My baseline model has a MSE of 26,388.78 while my final model has and MSE of 12,835.58. This is a difference of approximately 13,553.
+
+However, a decrease in MSE does not alone prove that my final model was better. Another reason that the final model is better is that the baseline model only uses two features, while the final model uses five features. All five of these features have strong backing to have been included in the model while not causing overfitting. To prove this, below is a heatmap I created showing the correlation of my five features:
+
+<iframe
+  src="assets/corr_heatmap.html"
+  width="1000"
+  height="1000"
+  frameborder="0"
+  style="margin-top: 20px; margin-bottom: -150px;"
+></iframe>
+
+As the model shows, the highest relation between features is 'carbohydrates' and 'protein' with a correlation coefficient of 0.626. The general threshold that you want avoid is features with a correlation coefficient of greater than or equal to 0.8. Therefore, these features all work very well together to produce a much-improved model.
+
+One last reason that the final model is better than the baseline model is that the final model uses Ridge Regression, which is much better equipped to handle multicollinearity, reduce overfitting, and generalize to unseen data.
+

@@ -144,6 +144,16 @@ Below is a table showing the aggregates of (1) average count of contributions ea
 
 ## **Framing a Prediction Problem**
 
+After that interesting EDA, I decided to shift gears. I decided to predict the 'calories' column of my recipes dataframe. This is a supervised learning regression problem because calories is a numeric variable. I am getting my wisdom teeth taken out soon, and am going to need to eat a lot of soup in the following days. To make it more interesting, I decided to specifically <span style="color: limegreen;">predict the 'calories' column for soup recipes</span>. 
+
+I determined which recipes were soup recipes by filtering my dataframe based on the name of the recipe including the substring "soup". Below is the line of code showing how I did it:
+
+```py
+recipes_copy = recipes.copy()
+recipes_copy = recipes_copy.loc[recipes_copy['name'].str.contains('soup', case=False, na=False)]
+```
+Note: The case=False parameter makes it so a case-insensitive search will occur
+
 ## **Baseline Model**
 
 ## **Final Model**

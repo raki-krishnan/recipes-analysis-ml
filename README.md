@@ -1,4 +1,4 @@
-# **From the Contributors to the Calories- Exploration of Recipes**
+# **From the Contributors to the Calories: An Exploration of Recipes - by Raki "Gordon Ramsay" Krishnan**
 
 ## **Introduction**
 
@@ -154,6 +154,41 @@ recipes_copy = recipes_copy.loc[recipes_copy['name'].str.contains('soup', case=F
 ```
 Note: The case=False parameter makes it so a case-insensitive search will occur
 
+Now that I have created this smaller dataframe called recipes_copy(), it is important to know how many rows are in the dataframe. After called recipes_copy.shape I saw that there are 9628 rows.
+
 ## **Baseline Model**
+
+My baseline model uses two features to predict the 'calories' column. Those two features are 'carbohydrates' and 'sugar', both quantitative features. As a result, I did not have to perform any one-hot encoding. This model is not super sophisticated, and is meant to be a basic introduction to predicting the 'calories' column. Before training and testing my model, one thing I checked was whether there were any NaN values in the calories column, as calories is the target variable. 
+
+```py
+print("Number of NaN calories columns:", recipes_copy['calories'].isna().sum())
+```
+
+Running this code printed out 0. It appears that the contributors that make soup are good about inputting the number of calories in their recipes.
+
+After creating my train test split, I created a pipline using the LinearRegression() model, as shown below.
+
+```py
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('regressor', LinearRegression())
+])
+```
+
+
+Below is a 3D graph showing the predicted and actual values of my baseline model. Feel free to drag your mouse and check it out from different angles!
+
+<iframe
+  src="assets/3D-plot.html"
+  width="800"
+  height="600"
+  frameborder="0"
+  style="margin-top: 20px; margin-bottom: -150px;"
+
+></iframe>
+
+This graph is a 3-dimensional scatterplot that shows the distribution of actual and predicted values for the calories column. It appears that the model did a decent job, as there is a lot of overlap between the red and blue. Additionally, I used the mean_squared_error function and r2_score functions from sklearn.metrics to calculate the mean-squared error (MSE) of this model. It has a MSE of 26388.78. 
+
+Given that there are 9628 rows in the dataframe this MSE not bad. However, the MSE does not tell the full story. I do not think that this model is very good overall. Firstly, the model relies only on 'carbohydrates' and 'sugar' to predict 'calories'. While these are important factors to indicate calorie content of soups, there are many more features that could be added to improve the predictions. Additionally, while standard scaling helps in handling features with different units or scales, it doesn't address the potential issue of outliers or non-normal distributions of features, which can negatively affect model performance. 
 
 ## **Final Model**

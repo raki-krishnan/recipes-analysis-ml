@@ -2,7 +2,7 @@
 
 ## **Introduction**
 
-I am a hungry person, both for knowledge and food (😆). Consequently, I decided that the most interesting data to analyze would be recipes for delicious dishes. The recipes I analyzed are pulled directly from [food.com](https://www.food.com). Each row in my dataframe contains a recipe, and each column contains useful information about the recipes. Displayed below is information about my dataframe, including the shape and column names.
+I am a hungry person, both for knowledge and food (😆). I am also a big fan of Gordon Ramsay (👨‍🍳😡). Consequently, I decided that the most interesting data to analyze would be recipes for delicious dishes. The recipes I analyzed are pulled directly from [food.com](https://www.food.com). Each row in my dataframe contains a recipe, and each column contains useful information about the recipes. Displayed below is information about my dataframe, including the shape and column names.
 
 ### Shape of the Recipes Dataframe: 
 
@@ -55,7 +55,7 @@ Once I had the merged dataframe, I had to make sure the data was easy to work wi
   frameborder="0"
   style="margin-top: 20px; margin-bottom: -150px;"
 ></iframe>
-As we can see, there are over 15,000 ratings of 0 stars. This is problematic because the rating scale is 1-5 stars, not inclusive of 0, so these ratings are probably from people who just left the star rating blank when writing their review. To be able to answer my question more accurately, I replaced all ratings of 0 with np.nan. The new distribution of ratings is shown below.
+As we can see, there are over 15,000 ratings of 0 stars. This is problematic because the rating scale is 1-5 stars, not inclusive of 0, so these ratings are probably from people who just left the star rating blank when writing their review. To be able to answer my question more accurately, I replaced all ratings of 0 with np.nan. In this case, I utilized the missing data imputation technique. The new distribution of ratings is shown below.
 
 <iframe
   src="assets/dist_of_ratings_after_replacing.html"
@@ -79,7 +79,7 @@ The last step I took in cleaning the data was by organizing the 'nutrition' colu
 
 ### Univariate Analysis
 
-So I had a clean dataframe, but what's next? I was looking to answer the question "**Which contributors consistently have the highest average recipe ratings?**" A good way to startanalyzing this was to create a column called 'num_contributions' and display its distribution. I created the column 'num_contributions' by grouping the dataframe by 'contributor_id' and counting how many times that contributor appeared. Given the sheer amount of contributors that contributed between 1-99 times, I decided to drop these datapoints when showing the distributions of 'num_contributions'. This made the data much less skewed and also more meaningful to look at, as my EDA question involved looking at contributors that **consistently** have the best ratings. Below is a boxplot showing the distribution of 'num_contributions' for contributors who contributed more than 100 times.
+So I had a clean dataframe, but what's next? I was looking to answer the question "**Which contributors consistently have the highest average recipe ratings?**" A good way to start analyzing this was to create a column called 'num_contributions' and display its distribution. I created the column 'num_contributions' by grouping the dataframe by 'contributor_id' and counting how many times that contributor appeared. Given the sheer amount of contributors that contributed between 1-99 times, I decided to drop these datapoints when showing the distributions of 'num_contributions'. This made the data much less skewed and also more meaningful to look at, as my EDA question involved looking at contributors that **consistently** have the best ratings. Below is a boxplot showing the distribution of 'num_contributions' for contributors who contributed more than 100 times.
 
 <iframe
   src="assets/contributions_per_contributor.html"
@@ -107,23 +107,39 @@ Below is the distribution is shown in a histogram.
   frameborder="0"
 ></iframe>
 
-As we can see, food.com reviewers seem to be quite supportive on average. Most recipes got an average rating of 4 or above! Over 48,000 recipes got an average rating between 4.9 stars and 5 stars. Another interesting pattern is that the average ratings tend to be closer to integers (i.e. 1 star, 2 stars, 3 stars, etc) rather than decimals (i.e. 1.5 stars, 2.5 stars, 3.5 stars, etc).
+As we can see, food.com reviewers seem to be quite supportive on average. Most recipes got an average rating of 4 or above! Over 48,000 recipes got an average rating between 4.9 stars and 5 stars. Another interesting pattern is that the average ratings tend to be closer to integers (i.e. 1 star, 2 stars, 3 stars, etc) rather than decimals (i.e. 1.3 stars, 2.6 stars, 3.8 stars, etc).
+
+### Bivariate Analysis
+
+After displaying the distribution of single columns, I looked at the distribution of multiple columns. Specifically, I answered my question with a cool interactive plot that looked at the top ten contributors by average rating. I configured the bar plot so that the user can change the minimum threshold for number of contributions for the contributor to be displayed. The reason I started the minimum threshold at 100 is that there are an overwhelming number of contributors with a small amount of contributions and an average rating between 4.9-5 stars. Additionally, I wanted to explore the contributors who were most **consistent**. The number inside of the bar is the nbumber of contributions that contributor has. This plot is shown below.
 
 <iframe
   src="assets/top_10_contributors_by_avg_rating.html"
   width="1000"
   height="700"
   frameborder="0"
+  style="margin-top: 20px; margin-bottom: -270px;"
+
 ></iframe>
 
+One trend to notice is that as you increase the minimum contribution threshold, the top ten contributos' average recipe ratings decrease. This makes sense because it is extremely difficult to maintain 5 star ratings when you have made more recipes. However, top ten contributors' average recipe ratings always stay above 4.5 stars. Also, we can connect back to seeing a contributor that contributed <span style="color: limegreen;">3,060 recipes</span> (from our box plot of the num_contributions distribution.). That person was contributor 37449 and has an average rating of <span style="color: limegreen;">4.787 stars</span>. That is super impressive!
+
+### Interesting Aggregate Table
+
+Below is a table showing the aggregates of (1) average count of contributions each contributor made in the and (2) the average rating for those contributors. This table helps us visualize the above graph in tabular format. For this table, I made the threshold of minimum contributions 488.5 because that is the third quartile of number of contributions, for contributors with 100+ contributions, as shown in our boxplot (Contributions per Contributor). In my original EDA question, we could define the term "consistent" however we want. In this case, I am defining "consistent" as a contributor who's number of contributions is above the third quartile in the IQR. This table is significant because it also helps us see that, given my definition of a consistent contributor, <span style="color: limegreen;"> contributor 461834 is our top contributor, as they contributed 1680 recipes and had an average rating of 4.85 stars </span>  
 
 |   contributor_id |   num_contributions |   avg_rating |
 |-----------------:|--------------------:|-------------:|
-|      2.19261e+06 |                 106 |      5       |
-| 306726           |                 115 |      4.98949 |
-|      2.39055e+06 |                 360 |      4.97907 |
-|      2.68903e+06 |                 139 |      4.97448 |
-|      2.21634e+06 |                 140 |      4.97424 |
+| 461834           |                1680 |      4.85124 |
+| 128473           |                1091 |      4.84722 |
+| 226863           |                2754 |      4.84693 |
+|      1.68072e+06 |                 492 |      4.84634 |
+| 526666           |                 872 |      4.84148 |
+| 227978           |                 688 |      4.83164 |
+| 482376           |                 969 |      4.82969 |
+| 174096           |                 705 |      4.82713 |
+| 266635           |                 994 |      4.82578 |
+| 169430           |                2310 |      4.82568 |
 
 
 ## **Framing a Prediction Problem**
